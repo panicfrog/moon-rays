@@ -32,10 +32,11 @@ func genColors(width : Int, height : Int) -> Array[Color] {
     { index: 0, startPoint: { x: 0, y: 0 }, endPoint: { x: width, y: height } },
     fn(item) {
       let { index, startPoint, endPoint } = item
-      let { x, y } = startPoint
+      let { x: sx, y: sy } = startPoint
+      let { x: ex, y: ey } = endPoint
       if index < colors_len {
-        let r = ((endPoint.x - x).to_float64() * 255.0 / endPoint.x.to_float64()).to_int()
-        let g = (y.to_float64() * 255.0 / endPoint.y.to_float64()).to_int()
+        let r = ((ex - sx).to_float64() * 255.0 / ex.to_float64()).to_int()
+        let g = (sy.to_float64() * 255.0 / ey.to_float64()).to_int()
         colors[index] = { r, g, b }
       }
     },
