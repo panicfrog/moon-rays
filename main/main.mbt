@@ -1,69 +1,135 @@
 struct Color {
-  r: Int
-  g: Int
-  b: Int
+  r : Int
+  g : Int
+  b : Int
 }
 
-func to_string(self: Color) -> String {
-  let {r, g, b} = self
+func to_string(self : Color) -> String {
+  let { r, g, b } = self
   "\(r) \(g) \(b)\n"
 }
 
-enum Option[X] {
-  None
-  Some(X)
+struct PPM {
+  width : Int
+  height : Int
+  colors : Array[Color]
 }
 
-func genColors(width: Int, height: Int) -> Array[Color] {
+// func newPPM(width : Int, height : Int, colors : Array[Color]) -> PPM {
+// { width, height, colors }
+// }
+
+func genPPM(width : Int, height : Int, f : (Int, Int) -> Array[Color]) -> PPM {
+  let colors = f(width, height)
+  { width, height, colors }
+}
+
+func genColors(width : Int, height : Int) -> Array[Color] {
   let b = 128
-  let colors = Array::make(width * height, { r: 0, g: 0, b: 0} )
-  fn next(w: Int, h: Int, index: Int) -> Option[(Int, Int, Int)] {
-    if w < width - 1 {
-      if h < height - 1 {
-        Some((w, h + 1, index + 1))
-      } else {
-        Some((w + 1, 0, index + 1))
-      }
-    } else {
-      None
-    }
-  }
+  let colors = Array::make(width * height, { r: 0, g: 0, b: 0 })
   let colors_len = colors.length()
-  var n = Option::Some(0, 0, 0)
-  var notEnd = true
-  while notEnd {
-    match n {
-      Some(w, h, i) => {
-        if (i < colors_len) {
-          colors[i] = {r: w, g: h, b: b}
-        }
-        n = next(w, h, i)
+  forEach(
+    { index: 0, startPoint: { x: 0, y: 0 }, endPoint: { x: width, y: height } },
+    fn(item) {
+      let { index, startPoint, endPoint } = item
+      let { x, y } = startPoint
+      if index < colors_len {
+        let r = ((endPoint.x - x).to_float64() * 255.0 / endPoint.x.to_float64()).to_int()
+        let g = (y.to_float64() * 255.0 / endPoint.y.to_float64()).to_int()
+        colors[index] = { r, g, b }
       }
-      _ => {
-        notEnd = false
-      }
-    }
-  }
+    },
+  )
   colors
 }
 
-pub func iter[X](self: List[X], f: (X) -> Unit) -> Unit {
-  match self {
-    Nil => ()
-    Cons(x, rest) => { f(x); iter(rest, f) }
+func to_string(self : PPM) -> String {
+  let { width, height, colors } = self
+  var content = "P3\n\(width) \(height)\n255\n"
+  var index = 0
+  while index < colors.length() {
+    let c = colors[index]
+    content = "\(content)\(c)"
+    index = index + 1
+  }
+  content
+}
+
+func print(self : PPM) -> Unit {
+  let { width, height, colors } = self
+  println("P3\n\(width) \(height)\n255\n")
+  var index = 0
+  while index < colors.length() {
+    let c = colors[index]
+    println(c)
+    index = index + 1
   }
 }
 
+enum Option[T] {
+  None
+  Some(T)
+}
+
+interface Sequence  {
+  next(Self) -> Option[Self]
+}
+
+func forEach[T : Sequence](v : T, f : (T) -> Unit) -> Unit {
+  var item = v
+  f(v)
+  var has_next = true
+  while has_next {
+    match item.next() {
+      Some(next) => {
+        f(next)
+        item = next
+        has_next = true
+      }
+      None => {
+        has_next = false
+      }
+    }
+  }
+}
+
+struct Point {
+  x : Int
+  y : Int
+}
+
+// 半闭半开区间
+
+struct SquareIter {
+  index : Int
+  startPoint : Point
+  endPoint : Point
+}
+
+func next(self : SquareIter) -> Option[SquareIter] {
+  let { index, startPoint, endPoint } = self
+  if startPoint.y >= endPoint.y || startPoint.x >= endPoint.x {
+    return None
+  } else {
+    let nextPoint = if startPoint.x < endPoint.x - 1 {
+      Option::Some({ x: startPoint.x + 1, y: startPoint.y })
+    } else if startPoint.y < endPoint.y - 1 {
+      Option::Some({ x: 0, y: startPoint.y + 1 })
+    } else {
+      Option::None
+    }
+    match nextPoint {
+      Some(p) => {
+        let v = { index: index + 1, startPoint: p, endPoint }
+        Some(v)
+      }
+      None => None
+    }
+  }
+}
 
 func init {
-  let image_width = 256
-  let image_height = 256
-  println("P3\n\(image_width) \(image_height)\n255\n")
-  let colors = genColors(image_width, image_height)
-  var len = 0
-  while len < colors.length() {
-    let c = colors[len]
-    println("\(c)")
-    len = len + 1
-  }
+  let ppm = genPPM(400, 300, genColors)
+  ppm.print()
 }
+
