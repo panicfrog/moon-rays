@@ -7,11 +7,11 @@ pub struct Ray {
 // return { origin, direction }
 // }
 
-func at(self : Ray, t : Float64) -> Vec3 {
+fn at(self : Ray, t : Double) -> Vec3 {
   return self.origin + self.direction.mul(t)
 }
 
-func hitSphere(self : Ray, center : Vec3, radius : Float64) -> Float64 {
+fn hitSphere(self : Ray, center : Vec3, radius : Double) -> Double {
   let oc = self.origin - center
   let a = self.direction.dot(self.direction)
   let b = 2.0 * oc.dot(self.direction)
@@ -24,7 +24,7 @@ func hitSphere(self : Ray, center : Vec3, radius : Float64) -> Float64 {
   }
 }
 
-func rayColor(self : Ray) -> Color {
+fn rayColor(self : Ray) -> Color {
   let times = self.hitSphere({ x: 0.0, y: 0.0, z: -1.0 }, 0.5)
   if times > 0.0 {
     let u = self.at(times) - { x: 0.0, y: 0.0, z: -1.0 }

@@ -2,7 +2,7 @@ pub interface Sequence  {
   next(Self) -> Option[Self]
 }
 
-pub func forEach[T : Sequence](v : T, f : (T) -> Unit) -> Unit {
+pub fn forEach[T : Sequence](v : T, f : (T) -> Unit) -> Unit {
   var item = v
   f(v)
   var has_next = true

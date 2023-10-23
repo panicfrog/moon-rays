@@ -8,13 +8,12 @@ struct PPM {
 // { width, height, colors }
 // }
 
-pub func genPPM(width : Int, height : Int, f : (Int, Int) -> Array[Color]) ->
-     PPM {
+pub fn genPPM(width : Int, height : Int, f : (Int, Int) -> Array[Color]) -> PPM {
   let colors = f(width, height)
   { width, height, colors }
 }
 
-pub func to_string(self : PPM) -> String {
+pub fn to_string(self : PPM) -> String {
   let { width, height, colors } = self
   var content = "P3\n\(width) \(height)\n255\n"
   var index = 0
@@ -26,7 +25,7 @@ pub func to_string(self : PPM) -> String {
   content
 }
 
-pub func print(self : PPM) -> Unit {
+pub fn print(self : PPM) -> Unit {
   let { width, height, colors } = self
   println("P3\n\(width) \(height)\n255\n")
   var index = 0
@@ -50,7 +49,7 @@ pub struct SquareIter {
   endPoint : Point
 }
 
-pub func next(self : SquareIter) -> Option[SquareIter] {
+pub fn next(self : SquareIter) -> Option[SquareIter] {
   let { index, startPoint, endPoint } = self
   if startPoint.y >= endPoint.y || startPoint.x >= endPoint.x {
     return None

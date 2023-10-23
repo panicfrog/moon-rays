@@ -9,8 +9,8 @@
 // let { x: sx, y: sy } = startPoint
 // let { x: ex, y: ey } = endPoint
 // if index < colors_len {
-// let r = ((ex - sx).to_float64() * 255.0 / ex.to_float64()).to_int()
-// let g = (sy.to_float64() * 255.0 / ey.to_float64()).to_int()
+// let r = ((ex - sx).to_double() * 255.0 / ex.to_double()).to_int()
+// let g = (sy.to_double() * 255.0 / ey.to_double()).to_int()
 // colors[index] = { r, g, b }
 // }
 // },
@@ -18,11 +18,11 @@
 // colors
 // }
 
-func init {
+fn init {
   // image
   let aspect_ratio = 16.0 / 9.0
   let width = 400
-  var height = (width.to_float64() / aspect_ratio).to_int()
+  var height = (width.to_double() / aspect_ratio).to_int()
   if height < 1 {
     height = 1
   }
@@ -30,7 +30,7 @@ func init {
   // Camera
   let focal_length = 1.0
   let viewportHeight = 2.0
-  let viewportWidth = viewportHeight * width.to_float64() / height.to_float64()
+  let viewportWidth = viewportHeight * width.to_double() / height.to_double()
   let camera_center = { x: 0.0, y: 0.0, z: 0.0 }
 
   // Calculate the vectors across the horizontal and down the vertical viewport edges.
@@ -38,8 +38,8 @@ func init {
   let viewportV = { x: 0.0, y: -viewportHeight, z: 0.0 }
 
   // Calculate the horizontal and vertical delta vectors from pixel to pixel.
-  let pixelDeltaU = viewportU.div(width.to_float64())
-  let pixelDeltaV = viewportV.div(height.to_float64())
+  let pixelDeltaU = viewportU.div(width.to_double())
+  let pixelDeltaV = viewportV.div(height.to_double())
 
   // Calculate the location of the upper left pixel.
   let viewportTopLeft = camera_center - { x: 0.0, y: 0.0, z: focal_length } - viewportU.div(
@@ -55,8 +55,8 @@ func init {
         let { x: sx, y: sy } = item.startPoint
         let index = item.index
         if index < colors_len {
-          let center = pixel00Loc + pixelDeltaU.mul(sx.to_float64()) + pixelDeltaV.mul(
-              sy.to_float64(),
+          let center = pixel00Loc + pixelDeltaU.mul(sx.to_double()) + pixelDeltaV.mul(
+              sy.to_double(),
             )
           let direction = center - camera_center
           let ray = { origin: camera_center, direction }
@@ -69,5 +69,7 @@ func init {
 
   let ppm = genPPM(width, height, pixelColor)
   ppm.print()
+  // let output = ppm.to_string()
+  ()
 }
 

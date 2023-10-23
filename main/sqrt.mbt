@@ -1,4 +1,4 @@
-func sqrt(number : Float64) -> Float64 {
+fn sqrt(number : Double) -> Double {
   let precision = 0.0000001
   var guess = number / 2.0
   var prev_guess = guess + 2.0 * precision

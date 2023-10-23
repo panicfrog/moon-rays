@@ -1,22 +1,22 @@
 struct Vec3 {
-  x : Float64
-  y : Float64
-  z : Float64
+  x : Double
+  y : Double
+  z : Double
 }
 
-func length(self : Vec3) -> Float64 {
+fn length(self : Vec3) -> Double {
   return sqrt(self.length_squared())
 }
 
-func length_squared(self : Vec3) -> Float64 {
+fn length_squared(self : Vec3) -> Double {
   return self.x * self.x + self.y * self.y + self.z * self.z
 }
 
-pub func op_add(self : Vec3, b : Vec3) -> Vec3 {
+pub fn op_add(self : Vec3, b : Vec3) -> Vec3 {
   return { x: self.x + b.x, y: self.y + b.y, z: self.z + b.z }
 }
 
-func op_sub(self : Vec3, b : Vec3) -> Vec3 {
+fn op_sub(self : Vec3, b : Vec3) -> Vec3 {
   return { x: self.x - b.x, y: self.y - b.y, z: self.z - b.z }
 }
 
@@ -24,15 +24,15 @@ func op_sub(self : Vec3, b : Vec3) -> Vec3 {
 // return { x: self.x * b.x, y: self.y * b.y, z: self.z * b.z }
 // }
 
-func mul(self : Vec3, t : Float64) -> Vec3 {
+fn mul(self : Vec3, t : Double) -> Vec3 {
   return { x: self.x * t, y: self.y * t, z: self.z * t }
 }
 
-func div(self : Vec3, t : Float64) -> Vec3 {
+fn div(self : Vec3, t : Double) -> Vec3 {
   return self.mul(1.0 / t)
 }
 
-func dot(self : Vec3, b : Vec3) -> Float64 {
+fn dot(self : Vec3, b : Vec3) -> Double {
   return self.x * b.x + self.y * b.y + self.z * b.z
 }
 
@@ -44,7 +44,7 @@ func dot(self : Vec3, b : Vec3) -> Float64 {
 // }
 // }
 
-func unitVector(self : Vec3) -> Vec3 {
+fn unitVector(self : Vec3) -> Vec3 {
   self.div(self.length())
 }
 
