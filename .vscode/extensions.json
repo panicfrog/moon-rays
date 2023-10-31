@@ -1,0 +1,8 @@
+{
+    "recommendations": [
+        "moonbit.moonbit-lang",
+        "eamodio.gitlens",
+        "dtsvet.vscode-wasm",
+        "ms-vscode.live-server"
+    ]
+}
