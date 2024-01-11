@@ -1,3 +1,3 @@
-pub func hello() -> String {
-    "Hello, world!"
+pub fn hello() -> String {
+  "Hello, world!"
 }
