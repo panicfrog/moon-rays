@@ -42,38 +42,42 @@ fn rayColor(self : Ray) -> Color {
 }
 
 struct HitRecord {
-  mut p: Vec3
-  mut normal: Vec3
-  mut t: Double
-  mut front_face: Bool
-}
-fn set_face_normal(self: HitRecord, ray: Ray, outward_normal: Vec3) {
-  self.front_face = ray.direction.dot(outward_normal) < 0.0
-  self.normal = if self.front_face { outward_normal } else { {x: 0.0, y: 0.0, z: 0.0} - outward_normal }
+  mut p : Vec3
+  mut normal : Vec3
+  mut t : Double
+  mut front_face : Bool
 }
 
-interface hittable {
-  hit(Self, Ray, Double, Double, HitRecord) -> Bool;
+fn set_face_normal(self : HitRecord, ray : Ray, outward_normal : Vec3) {
+  self.front_face = ray.direction.dot(outward_normal) < 0.0
+  self.normal = if self.front_face {
+    outward_normal
+  } else {
+    { x: 0.0, y: 0.0, z: 0.0 } - outward_normal
+  }
+}
+
+trait hittable  {
+  hit(Self, Ray, Double, Double, HitRecord) -> Bool
 }
 
 struct Sphere {
-  center: Vec3
-  radius: Double
+  center : Vec3
+  radius : Double
 }
 
-fn hit(self: Sphere, ray: Ray, ray_tmin: Double, ray_tmax: Double, rec: HitRecord) -> Bool {
+fn hit(self : Sphere, ray : Ray, ray_tmin : Double, ray_tmax : Double,
+        rec : HitRecord) -> Bool {
   let oc = ray.origin - self.center
   let a = ray.direction.length_squared()
   let half_b = oc.dot(ray.direction)
   let c = oc.length_squared() - self.radius * self.radius
-
   let discriminant = half_b * half_b - a * c
   if discriminant < 0.0 {
     return false
   }
   let sqrtd = sqrt(discriminant)
-
-  var root = (-half_b - sqrtd) / a
+  let mut root = (-half_b - sqrtd) / a
   if root <= ray_tmin || ray_tmax <= root {
     root = (-half_b + sqrtd) / a
     if root < ray_tmin || ray_tmax <= root {
