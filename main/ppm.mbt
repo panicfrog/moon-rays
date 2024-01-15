@@ -8,32 +8,56 @@ struct PPM {
 // { width, height, colors }
 // }
 
+pub struct PPMSeq {
+  ppm : PPM
+  index : Int
+  length : Int
+}
+
+pub fn color(self : PPMSeq) -> Color {
+  let { ppm, index, .. } = self
+  ppm.colors[index]
+}
+
+pub fn next(self : PPMSeq) -> Option[PPMSeq] {
+  let { ppm, index, length } = self
+  if index < length - 1 {
+    let v = { ppm, index: index + 1, length }
+    Some(v)
+  } else {
+    None
+  }
+}
+
+pub fn to_seq(self : PPM) -> PPMSeq {
+  { ppm: self, index: 0, length: self.colors.length() }
+}
+
+pub fn header(self : PPM) -> String {
+  let { width, height, .. } = self
+  "P3\n\(width) \(height)\n255\n\n"
+}
+
 pub fn genPPM(width : Int, height : Int, f : (Int, Int) -> Array[Color]) -> PPM {
   let colors = f(width, height)
   { width, height, colors }
 }
 
 pub fn to_string(self : PPM) -> String {
-  let { width, height, colors } = self
-  var content = "P3\n\(width) \(height)\n255\n"
-  var index = 0
-  while index < colors.length() {
-    let c = colors[index]
-    content = "\(content)\(c)"
-    index = index + 1
-  }
+  let mut content = self.header()
+  forEach(
+    self.to_seq(),
+    fn(p) {
+      let c = p.color()
+      content = "\(content)\(c)"
+    },
+  )
   content
 }
 
 pub fn print(self : PPM) -> Unit {
-  let { width, height, colors } = self
-  println("P3\n\(width) \(height)\n255\n")
-  var index = 0
-  while index < colors.length() {
-    let c = colors[index]
-    println(c)
-    index = index + 1
-  }
+  print(self.header())
+  forEach(self.to_seq(), fn(p) { print(p.color()) })
 }
 
 pub struct Point {
@@ -70,4 +94,3 @@ pub fn next(self : SquareIter) -> Option[SquareIter] {
     }
   }
 }
-

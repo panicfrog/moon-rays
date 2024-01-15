@@ -18,11 +18,32 @@
 // colors
 // }
 
+type CStr
+
+fn cstr_make(len : Int) -> CStr = "" "cstr_make"
+
+fn cstr_free(cstr : CStr) = "" "cstr_free"
+
+fn cstr_set_char(cstr : CStr, index : Int, c : Char) = "" "cstr_set_char"
+
+fn ppm_row_handler(line : CStr) = "" "ppm_row_handler"
+
+fn string_to_cstr(s : String) -> CStr {
+  let len = s.length()
+  let cstr = cstr_make(len)
+  let mut i = 0
+  while i < len {
+    cstr_set_char(cstr, i, s[i])
+    i = i + 1
+  }
+  return cstr
+}
+
 fn init {
   // image
   let aspect_ratio = 16.0 / 9.0
   let width = 400
-  var height = (width.to_double() / aspect_ratio).to_int()
+  let mut height = (width.to_double() / aspect_ratio).to_int()
   if height < 1 {
     height = 1
   }
@@ -68,8 +89,18 @@ fn init {
   }
 
   let ppm = genPPM(width, height, pixelColor)
-  ppm.print()
-  // let output = ppm.to_string()
+  // ppm.print()
+  ppm_row_handler(string_to_cstr(ppm.header()))
+  forEach(
+    ppm.to_seq(),
+    fn(p) {
+      let content = p.color().to_string()
+      let cstr = string_to_cstr(content)
+      ppm_row_handler(cstr)
+      cstr_free(cstr)
+    },
+  )
   ()
+  // let output = ppm.to_string()
+  // print_string(output)
 }
-
