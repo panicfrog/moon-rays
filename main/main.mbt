@@ -18,26 +18,27 @@
 // colors
 // }
 
-type CStr
+// type CStr
 
-fn cstr_make(len : Int) -> CStr = "" "cstr_make"
+// fn cstr_make(len : Int) -> CStr = "" "cstr_make"
 
-fn cstr_free(cstr : CStr) = "" "cstr_free"
+// fn cstr_free(cstr : CStr) = "" "cstr_free"
 
-fn cstr_set_char(cstr : CStr, index : Int, c : Char) = "" "cstr_set_char"
+// fn cstr_set_char(cstr : CStr, index : Int, c : Char) = "" "cstr_set_char"
 
-fn ppm_row_handler(line : CStr) = "" "ppm_row_handler"
+// fn ppm_row_handler(line : CStr) = "" "ppm_row_handler"
 
-fn string_to_cstr(s : String) -> CStr {
-  let len = s.length()
-  let cstr = cstr_make(len)
-  let mut i = 0
-  while i < len {
-    cstr_set_char(cstr, i, s[i])
-    i = i + 1
-  }
-  return cstr
-}
+// fn withString(s : String, f : (CStr) -> Unit) {
+// let len = s.length()
+// let cstr = cstr_make(len)
+// let mut i = 0
+// while i < len {
+// cstr_set_char(cstr, i, s[i])
+// i = i + 1
+// }
+// f(cstr)
+// cstr_free(cstr)
+// }
 
 fn init {
   // image
@@ -89,18 +90,14 @@ fn init {
   }
 
   let ppm = genPPM(width, height, pixelColor)
-  // ppm.print()
-  ppm_row_handler(string_to_cstr(ppm.header()))
-  forEach(
-    ppm.to_seq(),
-    fn(p) {
-      let content = p.color().to_string()
-      let cstr = string_to_cstr(content)
-      ppm_row_handler(cstr)
-      cstr_free(cstr)
-    },
-  )
+  ppm.print()
+  // withString(ppm.header(), ppm_row_handler)
+  // forEach(
+  // ppm.to_seq(),
+  // fn(p) {
+  // let content = p.color().to_string()
+  // withString(content, ppm_row_handler)
+  // },
+  // )
   ()
-  // let output = ppm.to_string()
-  // print_string(output)
 }
