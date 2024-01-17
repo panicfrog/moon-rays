@@ -11,7 +11,7 @@ pub fn forEach[T : Sequence](v : T, f : (T) -> Unit) -> Unit {
         f(next)
         item = next
       }
-      None => { break }
+      None => break
     }
   }
 }
