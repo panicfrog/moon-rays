@@ -3,9 +3,9 @@ pub struct Ray {
   direction : Vec3
 }
 
-// func newRay(origin : Vec3, direction : Vec3) -> Ray {
-// return { origin, direction }
-// }
+pub fn newRay(origin : Vec3, direction : Vec3) -> Ray {
+  { origin, direction }
+}
 
 fn at(self : Ray, t : Double) -> Vec3 {
   return self.origin + self.direction.mul(t)

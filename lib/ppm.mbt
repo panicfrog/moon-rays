@@ -56,8 +56,8 @@ pub fn to_string(self : PPM) -> String {
 }
 
 pub fn print(self : PPM) -> Unit {
-  print(self.header())
-  forEach(self.to_seq(), fn(p) { print(p.color()) })
+  self |> header |> print
+  forEach(self |> to_seq, fn(p) { p |> color |> print })
 }
 
 pub struct Point {
@@ -85,12 +85,7 @@ pub fn next(self : SquareIter) -> Option[SquareIter] {
     } else {
       Option::None
     }
-    match nextPoint {
-      Some(p) => {
-        let v = { index: index + 1, startPoint: p, endPoint }
-        Some(v)
-      }
-      None => None
-    }
+    let p = nextPoint?
+    Some({ index: index + 1, startPoint: p, endPoint })
   }
 }
