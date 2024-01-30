@@ -36,13 +36,13 @@ pub fn dot(self : Vec3, b : Vec3) -> Double {
   return self.x * b.x + self.y * b.y + self.z * b.z
 }
 
-// func cross(self : Vec3, b : Vec3) -> Vec3 {
-// return {
-// x: self.y * b.z - self.z * b.y,
-// y: self.z * b.x - self.x * b.z,
-// z: self.x * b.y - self.y * b.x,
-// }
-// }
+pub fn cross(self : Vec3, b : Vec3) -> Vec3 {
+  return {
+    x: self.y * b.z - self.z * b.y,
+    y: self.z * b.x - self.x * b.z,
+    z: self.x * b.y - self.y * b.x,
+  }
+}
 
 pub fn unitVector(self : Vec3) -> Vec3 {
   self.div(self.length())
