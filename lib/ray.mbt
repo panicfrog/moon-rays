@@ -24,7 +24,7 @@ fn hitSphere(self : Ray, center : Vec3, radius : Double) -> Double {
   }
 }
 
-fn rayColor(self : Ray) -> Color {
+pub fn rayColor(self : Ray) -> Color {
   let times = self.hitSphere({ x: 0.0, y: 0.0, z: -1.0 }, 0.5)
   if times > 0.0 {
     let u = self.at(times) - { x: 0.0, y: 0.0, z: -1.0 }
@@ -41,7 +41,7 @@ fn rayColor(self : Ray) -> Color {
   }
 }
 
-struct HitRecord {
+pub struct HitRecord {
   mut p : Vec3
   mut normal : Vec3
   mut t : Double

@@ -53,11 +53,11 @@ fn init {
   let focal_length = 1.0
   let viewportHeight = 2.0
   let viewportWidth = viewportHeight * width.to_double() / height.to_double()
-  let camera_center = { x: 0.0, y: 0.0, z: 0.0 }
+  let camera_center = @lib.Vec3::{ x: 0.0, y: 0.0, z: 0.0 }
 
   // Calculate the vectors across the horizontal and down the vertical viewport edges.
-  let viewportU = { x: viewportWidth, y: 0.0, z: 0.0 }
-  let viewportV = { x: 0.0, y: -viewportHeight, z: 0.0 }
+  let viewportU = @lib.Vec3::{ x: viewportWidth, y: 0.0, z: 0.0 }
+  let viewportV = @lib.Vec3::{ x: 0.0, y: -viewportHeight, z: 0.0 }
 
   // Calculate the horizontal and vertical delta vectors from pixel to pixel.
   let pixelDeltaU = viewportU.div(width.to_double())
@@ -68,11 +68,15 @@ fn init {
       2.0,
     ) - viewportV.div(2.0)
   let pixel00Loc = viewportTopLeft + (pixelDeltaU + pixelDeltaV).mul(0.5)
-  fn pixelColor(w : Int, h : Int) -> Array[Color] {
-    let colors = Array::make(w * h, { r: 0, g: 0, b: 0 })
+  fn pixelColor(w : Int, h : Int) -> Array[@lib.Color] {
+    let colors = Array::make(w * h, @lib.Color::{ r: 0, g: 0, b: 0 })
     let colors_len = colors.length()
-    forEach(
-      { index: 0, startPoint: { x: 0, y: 0 }, endPoint: { x: w, y: h } },
+    @lib.forEach(
+      @lib.SquareIter::{
+        index: 0,
+        startPoint: @lib.Point::{ x: 0, y: 0 },
+        endPoint: @lib.Point::{ x: w, y: h },
+      },
       fn(item) {
         let { x: sx, y: sy } = item.startPoint
         let index = item.index
@@ -81,7 +85,7 @@ fn init {
               sy.to_double(),
             )
           let direction = center - camera_center
-          let ray = { origin: camera_center, direction }
+          let ray = @lib.Ray::{ origin: camera_center, direction }
           colors[index] = ray.rayColor()
         }
       },
@@ -89,10 +93,10 @@ fn init {
     colors
   }
 
-  let ppm = genPPM(width, height, pixelColor)
+  let ppm = @lib.genPPM(width, height, pixelColor)
   // ppm.print()
   withCString(ppm.header(), ppm_row_handler)
-  forEach(
+  @lib.forEach(
     ppm.to_seq(),
     fn(p) {
       let content = p.color().to_string()

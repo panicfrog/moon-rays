@@ -1,14 +1,14 @@
-struct Vec3 {
+pub struct Vec3 {
   x : Double
   y : Double
   z : Double
 }
 
-fn length(self : Vec3) -> Double {
+pub fn length(self : Vec3) -> Double {
   return sqrt(self.length_squared())
 }
 
-fn length_squared(self : Vec3) -> Double {
+pub fn length_squared(self : Vec3) -> Double {
   return self.x * self.x + self.y * self.y + self.z * self.z
 }
 
@@ -16,23 +16,23 @@ pub fn op_add(self : Vec3, b : Vec3) -> Vec3 {
   return { x: self.x + b.x, y: self.y + b.y, z: self.z + b.z }
 }
 
-fn op_sub(self : Vec3, b : Vec3) -> Vec3 {
+pub fn op_sub(self : Vec3, b : Vec3) -> Vec3 {
   return { x: self.x - b.x, y: self.y - b.y, z: self.z - b.z }
 }
 
-// func op_mul(self : Vec3, b : Vec3) -> Vec3 {
-// return { x: self.x * b.x, y: self.y * b.y, z: self.z * b.z }
-// }
+pub fn op_mul(self : Vec3, b : Vec3) -> Vec3 {
+  return { x: self.x * b.x, y: self.y * b.y, z: self.z * b.z }
+}
 
-fn mul(self : Vec3, t : Double) -> Vec3 {
+pub fn mul(self : Vec3, t : Double) -> Vec3 {
   return { x: self.x * t, y: self.y * t, z: self.z * t }
 }
 
-fn div(self : Vec3, t : Double) -> Vec3 {
+pub fn div(self : Vec3, t : Double) -> Vec3 {
   return self.mul(1.0 / t)
 }
 
-fn dot(self : Vec3, b : Vec3) -> Double {
+pub fn dot(self : Vec3, b : Vec3) -> Double {
   return self.x * b.x + self.y * b.y + self.z * b.z
 }
 
@@ -44,7 +44,6 @@ fn dot(self : Vec3, b : Vec3) -> Double {
 // }
 // }
 
-fn unitVector(self : Vec3) -> Vec3 {
+pub fn unitVector(self : Vec3) -> Vec3 {
   self.div(self.length())
 }
-

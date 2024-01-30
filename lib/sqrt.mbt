@@ -1,7 +1,7 @@
 fn sqrt(number : Double) -> Double {
   let precision = 0.0000001
-  var guess = number / 2.0
-  var prev_guess = guess + 2.0 * precision
+  let mut guess = number / 2.0
+  let mut prev_guess = guess + 2.0 * precision
   if number < 0.0 {
     return -1.0
   }
@@ -14,4 +14,3 @@ fn sqrt(number : Double) -> Double {
   }
   guess
 }
-
